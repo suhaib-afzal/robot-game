@@ -1,14 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using static RobotApp.GridConstraintsFunctions;
-using static RobotApp.RobotPositionFunctions;
+using static RobotApp.App.DataTypes.GridConstraintsFunctions;
+using static RobotApp.App.DataTypes.RobotPositionFunctions;
 using LanguageExt;
 using LanguageExt.Common;
+using RobotApp.App.Execution;
+using RobotApp.App.DataTypes;
 
 namespace RobotApp;
 
-using Instruction = Func<RobotPosition, RobotPosition>;
 
 class Program
 {
@@ -41,6 +42,7 @@ class Program
       moveRobotForward
     };
     var result = Execute.runInstructions(gridConstraints, goalPos, startPos, instructions);
+
     var resultString = result.Right(x => x.ToString()).Left(y => y.ToString());
     Console.WriteLine(resultString);
   }
