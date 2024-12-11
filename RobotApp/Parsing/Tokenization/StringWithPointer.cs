@@ -10,6 +10,12 @@ namespace RobotApp.Parsing.Tokenization;
 
 public class StringWithPointer
 {
+    public StringWithPointer(string value, int pointer)
+    {
+        Value = value;
+        Pointer = pointer;
+    }
+
     public string Value { get; set; }
 
     public int Pointer { get; set; }
@@ -17,14 +23,9 @@ public class StringWithPointer
 
 public static class StringWithPointerFunctions
 {
-    public static bool IsAtEnd(StringWithPointer strP)
+    public static StringWithPointer IncrementBy(StringWithPointer strP, int n)
     {
-        return (strP.Value.Length - 1 == strP.Pointer);
-    }
-
-    public static Option<(char,StringWithPointer)> GetCharAndIncrement(StringWithPointer strP)
-    {
-        throw new NotImplementedException();
+        return new StringWithPointer(strP.Value, strP.Pointer + n);
     }
 
 }

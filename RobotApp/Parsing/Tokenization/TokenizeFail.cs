@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LanguageExt;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,9 +11,22 @@ namespace RobotApp.Parsing.Tokenization
     {
         public string Message { get; set; }
 
-        public TokenizeFail(string message)
+        public string Line { get; set; }
+
+        public Option<int> ProblemPosition { get; set; } 
+
+        public TokenizeFail(string message, string line)
         {
             Message = message;
+            Line = line;
+            ProblemPosition = Option<int>.None;
+        }
+
+        public TokenizeFail(string message, string line, Option<int> problemPosition)
+        {
+            Message = message;
+            Line = line;
+            ProblemPosition = problemPosition;
         }
     }
 }

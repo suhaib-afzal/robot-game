@@ -43,43 +43,60 @@ public static class TokenizerFunctions
         throw new NotImplementedException();
     }
 
-    public static Either<TokenizeFail, WithStringPointerState<Token>> TokenizeWord(StringWithPointer strP)
+    public static Option<WithStringPointerState<Token>> TokenizeWord(StringWithPointer strP)
     {
-        throw new NotImplementedException();
+        //Match with strings starting with " kjkdokf", "jdciojcdij", " kcmcm " 
+        var match = Regex.Match(strP.Value[strP.Pointer..], 
+                               "^([a-z]{2,} )|^( [a-z]{2,} )|^([a-z]{2,})$", 
+                               RegexOptions.IgnoreCase);
+        if(match.Success)
+        {
+            var val = match.Value;
+            var nextState = IncrementBy(strP, match.Value.Length);
+            var token = new Token(val, TokenType.Word);
+            return new WithStringPointerState<Token>(token, nextState);
+        }
+        else
+        {
+            return None;
+        }
     }
 
-    public static Either<TokenizeFail, WithStringPointerState<Token>> TokenizeNumber(StringWithPointer strP)
+    public static Option<WithStringPointerState<Token>> TokenizeNumber(StringWithPointer strP)
     {
-        throw new NotImplementedException();
+        var match = Regex.Match(strP.Value[strP.Pointer..],
+                                "^([0-9]{1,} )|^( [0-9]{1,} )|^([0-9]{1,})$");
+        if (match.Success)
+        {
+            var val = match.Value;
+            var nextState = IncrementBy(strP, match.Value.Length);
+            var token = new Token(val, TokenType.Number);
+            return new WithStringPointerState<Token>(token, nextState);
+        }
+        else
+        {
+            return None;
+        }
     }
 
-    public static Either<TokenizeFail, Option<WithStringPointerState<Token>>> TokenizeStandaloneLetter(StringWithPointer strP)
+    public static Option<WithStringPointerState<Token>> TokenizeStandaloneLetter(StringWithPointer strP)
     {
-        
-        var thinhg = from alpha in OptionT(ConsumeChar(strP, _ => true, "Failed to consume any character"))
-                     from spc in ConsumeChar(alpha.UpdatedStringWPointer, c => c == ' ', "Expecting space after Alphabetic Character")
-                     select spc;
-
+        var match = Regex.Match(strP.Value,
+                               "^([a-z] )|^( [a-z] )|^([a-z])$",
+                               RegexOptions.IgnoreCase);
+        if (match.Success)
+        {
+            var val = match.Value;
+            var nextState = IncrementBy(strP, match.Value.Length);
+            var token = new Token(val, TokenType.Number);
+            return new WithStringPointerState<Token>(token, nextState);
+        }
+        else
+        {
+            return None;
+        }
     }
 
-    public static Either<TokenizeFail, Option<WithStringPointerState<char>>> ConsumeChar(StringWithPointer strP, Func<char, bool> pred, string failedMessage)
-    {
-        return GetCharAndIncrement(strP)
-            .Match<Either<TokenizeFail, Option<WithStringPointerState<char>>>>(
-              None: () => Option<WithStringPointerState<char>>.None,
-              Some: tup =>
-              {
-                  var c = tup.Item1;
-                  var state = tup.Item2;
-                  if (pred(c))
-                  {
-                      return Some(new WithStringPointerState<char>(c, state));
-                  }
-
-                  return new TokenizeFail(failedMessage);
-              }
-            );
-    }
 
     public static Either<TokenizeFail, List<T>> Many<T>(Func<StringWithPointer, Either<TokenizeFail, T>> tokenizer)
     {

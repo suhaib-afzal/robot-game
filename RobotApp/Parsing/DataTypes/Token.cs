@@ -8,6 +8,12 @@ namespace RobotApp.Parsing.DataTypes;
 
 public class Token
 {
+    public Token(string value, TokenType tokenType)
+    {
+        Value = value;
+        TokenType = tokenType;
+    }
+
     public string Value;
 
     public TokenType TokenType;
@@ -18,7 +24,4 @@ public enum TokenType
     Word,
     Number,
     StandaloneLetter,
-    Space,
-    Start,
-    End,
 }
