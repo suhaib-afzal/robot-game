@@ -17,7 +17,6 @@ public enum CompassDirection
 
 public static class CompassDirectionFunctions
 {
-    private static string unexpectedCompassDirectionMsg = ;
 
     public static CompassDirection turnLeft(CompassDirection direction)
     {

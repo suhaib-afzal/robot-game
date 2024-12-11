@@ -6,13 +6,22 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using static RobotApp.App.DataTypes.GridConstraintsFunctions;
-using static RobotApp.App.DataTypes.RobotPositionFunctions;
 
 namespace RobotApp.App.Execution;
 
 public static class Execute
 {
-    public static Either<ExecutionError, ExecutionResult> runInstructions(
+    public static List<Either<ExecutionError, ExecutionResult>> runGame(GameSpecification gameSpecification)
+    {
+        var gridConstraints = gameSpecification.GridConstraints;
+        return gameSpecification.Journeys.Map(journey => runInstructions(gridConstraints,
+                                                                         journey.GoalPosition,
+                                                                         journey.StartPosition,
+                                                                         journey.Instructions))
+                                                                        .ToList();
+    }
+
+    private static Either<ExecutionError, ExecutionResult> runInstructions(
                                                           GridConstraints gridConstraints,
                                                           RobotPosition goalPosition,
                                                           RobotPosition position,

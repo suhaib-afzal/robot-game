@@ -28,22 +28,31 @@ class Program
       moveRobotForward, 
       turnRobotLeft, 
       moveRobotForward, 
-      turnRobotRight, 
-      moveRobotForward,
       turnRobotLeft,
-      moveRobotForward,
-      turnRobotRight,
-      moveRobotForward,
-      turnRobotLeft,
-      moveRobotForward,
-      turnRobotRight,
-      moveRobotForward,
       turnRobotLeft,
       moveRobotForward
     };
-    var result = Execute.runInstructions(gridConstraints, goalPos, startPos, instructions);
+    var gameSpec = new GameSpecification() 
+    { 
+        GridConstraints = gridConstraints, 
+        Journeys = new List<Journey> 
+        { 
+            new Journey() 
+            { 
+                GoalPosition = goalPos, 
+                Instructions = instructions, 
+                StartPosition = startPos 
+            } 
+        } 
+    };
 
-    var resultString = result.Right(x => x.ToString()).Left(y => y.ToString());
+    var result = Execute.runGame(gameSpec);
+
+    var resultString = result
+        .ConvertAll(
+            e => e.Right(x => x.ToString()).Left(y => y.ToString())
+        )
+        .Concat();
     Console.WriteLine(resultString);
   }
 }
