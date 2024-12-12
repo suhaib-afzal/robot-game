@@ -24,5 +24,6 @@ public enum TokenType
     Word,
     Number,
     StandaloneLetter,
-    End
+    NumberxNumber,
+    End,
 }

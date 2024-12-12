@@ -8,7 +8,7 @@ namespace RobotApp.Parsing.DataTypes;
 
 public class TokenLine
 {
-    public TokenLine(List<Token> tokens, int lineNumber)
+    public TokenLine(int lineNumber, List<Token> tokens)
     {
         Tokens = tokens;
         LineNumber = lineNumber;

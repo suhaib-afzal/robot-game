@@ -5,7 +5,6 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using static LanguageExt.Compositions<A>;
 
 namespace RobotApp.Parsing.Tokenization;
 
@@ -31,7 +30,7 @@ public static class StringWithPointerFunctions
 
     public static Option<string> GetRestOfString(StringWithPointer strP)
     {
-        if (strP.Pointer > strP.Value.Length)
+        if (strP.Pointer > strP.Value.Length - 1)
         {
             return Option<string>.None;
         }

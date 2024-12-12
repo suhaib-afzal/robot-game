@@ -8,6 +8,12 @@ namespace RobotApp.Parsing.DataTypes;
 
 public class TextLine
 {
+    public TextLine(string text, int lineNumber)
+    {
+        Text = text;
+        LineNumber = lineNumber;
+    }
+
     public string Text { get; set; }
 
     public int LineNumber { get; set; }
