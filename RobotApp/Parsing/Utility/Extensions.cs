@@ -35,4 +35,5 @@ public static class Extensions
     public static bool isAlphabet(this char c) => Regex.IsMatch(c.ToString(), "[a-z]", RegexOptions.IgnoreCase);
 
     public static bool isNumeric(this char c) => Regex.IsMatch(c.ToString(), "[0-9]");
+
 }

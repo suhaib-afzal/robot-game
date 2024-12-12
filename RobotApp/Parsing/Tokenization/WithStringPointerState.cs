@@ -12,11 +12,11 @@ namespace RobotApp.Parsing.Tokenization
         public WithStringPointerState(T value, StringWithPointer stringWithPointer)
         {
             Value = value;
-            UpdatedStringWPointer = stringWithPointer;
+            StringWithPointer = stringWithPointer;
         }
 
         public T Value { get; set; }
 
-        public StringWithPointer UpdatedStringWPointer { get; set; }
+        public StringWithPointer StringWithPointer { get; set; }
     }
 }
