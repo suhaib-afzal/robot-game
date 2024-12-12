@@ -270,8 +270,17 @@ eiojfjfi";
                 ),
                 new Chunk<TokenLine>(new()
                     {
-                        new TokenLine(10, new() {new Token("39", TokenType.Number), new Token("99", TokenType.Number), new Token("I", TokenType.StandaloneLetter), new Token("I", TokenType.StandaloneLetter), new Token("O", TokenType.StandaloneLetter), new Token("P", TokenType.StandaloneLetter) }),
-                        new TokenLine(11, new() {new Token("eiojfjfi", TokenType.Word) })
+                        new TokenLine(10, new() {
+                            new Token("39", TokenType.Number),
+                            new Token("99", TokenType.Number),
+                            new Token("I", TokenType.StandaloneLetter),
+                            new Token("I", TokenType.StandaloneLetter),
+                            new Token("O", TokenType.StandaloneLetter),
+                            new Token("P", TokenType.StandaloneLetter) 
+                        }),
+                        new TokenLine(11, new() {
+                            new Token("eiojfjfi", TokenType.Word) 
+                        })
                     }
                 )    
             }
