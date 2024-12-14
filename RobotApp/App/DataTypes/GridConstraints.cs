@@ -8,6 +8,12 @@ namespace RobotApp.App.DataTypes;
 
 public class GridConstraints
 {
+    public GridConstraints((int, int) gridDimensions, List<(int, int)> obstaclePositions)
+    {
+        GridDimensions = gridDimensions;
+        ObstaclePositions = obstaclePositions;
+    }
+
     public (int, int) GridDimensions { get; set; }
 
     public List<(int, int)> ObstaclePositions { get; set; }

@@ -58,4 +58,13 @@ public static class DocAndChunkFunctions
                from rest in SequenceHelper(list.Skip(1).ToList(), acc.Append(first).ToList(), func)
                select rest;
     }
+
+    /*
+    public static Either<L, T> Expect<L, T>(this Doc<TokenLine> doc, int lineNum, Either<L,Chunk<TokenLine>> expectation)
+    {
+
+    }
+    */
+
+
 }

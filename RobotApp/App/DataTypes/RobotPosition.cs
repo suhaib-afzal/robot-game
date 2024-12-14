@@ -10,6 +10,12 @@ namespace RobotApp.App.DataTypes;
 
 public class RobotPosition
 {
+    public RobotPosition((int, int) coordinates, CompassDirection facingDirection)
+    {
+        Coordinates = coordinates;
+        FacingDirection = facingDirection;
+    }
+
     public (int, int) Coordinates { get; set; }
 
     public CompassDirection FacingDirection { get; set; }

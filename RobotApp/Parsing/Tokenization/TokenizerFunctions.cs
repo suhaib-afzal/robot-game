@@ -63,6 +63,8 @@ public static class TokenizerFunctions
                );
     }
 
+    //TODO: Make this Lazy so we don't have to include "isEnd" and we can just
+    //      handle the End case with the above TakeWith
     private static Option<Seq<Token>> RecurseTokenizer(
         Func<StringWithPointer, Option<WithStringPointerState<Token>>> tokeizer,
         StringWithPointer strP)
