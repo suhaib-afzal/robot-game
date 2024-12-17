@@ -11,17 +11,17 @@ namespace RobotApp.App.Execution;
 
 public static class Execute
 {
-    public static List<Either<ExecutionError, ExecutionResult>> runGame(GameSpecification gameSpecification)
+
+    public static List<Either<ExecutionFail, ExecutionResult>> RunGame(GameSpecification gameSpecification)
     {
-        var gridConstraints = gameSpecification.GridConstraints;
-        return gameSpecification.Journeys.Map(journey => runInstructions(gridConstraints,
+        return gameSpecification.Journeys.Map(journey => RunInstructions(gameSpecification.GridConstraints,
                                                                          journey.GoalPosition,
                                                                          journey.StartPosition,
                                                                          journey.Instructions))
                                                                         .ToList();
     }
 
-    private static Either<ExecutionError, ExecutionResult> runInstructions(
+    private static Either<ExecutionFail, ExecutionResult> RunInstructions(
                                                           GridConstraints gridConstraints,
                                                           RobotPosition goalPosition,
                                                           RobotPosition position,
@@ -44,15 +44,15 @@ public static class Execute
 
         if (!withinBounds(gridConstraints, nextPosition))
         {
-            return new ExecutionError("OUT OF BOUNDS");
+            return new ExecutionFail("OUT OF BOUNDS");
         }
 
         if (hasCrashedIntoObstacle(gridConstraints, nextPosition))
         {
             return new
-              ExecutionError($"CRASHED {nextPosition.Coordinates.Item1} {nextPosition.Coordinates.Item2}");
+              ExecutionFail($"CRASHED {nextPosition.Coordinates.Item1} {nextPosition.Coordinates.Item2}");
         }
 
-        return runInstructions(gridConstraints, goalPosition, nextPosition, restInstructions);
+        return RunInstructions(gridConstraints, goalPosition, nextPosition, restInstructions);
     }
 }

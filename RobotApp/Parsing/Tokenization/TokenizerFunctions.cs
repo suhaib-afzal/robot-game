@@ -20,7 +20,7 @@ namespace RobotApp.Parsing.Tokenization;
 
 public static class TokenizerFunctions
 {
-    public static Either<TokenizeFail, Doc<TokenLine>> TokenizeDocument(string rawDoc)
+    public static Either<ParsingFail, Doc<TokenLine>> TokenizeDocument(string rawDoc)
     {
         return Chunker(rawDoc).Sequence(textline => Tokenize(textline));
     }
@@ -40,10 +40,10 @@ public static class TokenizerFunctions
 
     public static string TokenizeFailMesg =>
         @"Unable to do initial parsing of line. Please only use seqeunces of 1 or more 
-          alphabetic characters or seqeunces of 1 or more numeric characters seperated by
-          single spaces";
+alphabetic characters or seqeunces of 1 or more numeric characters seperated by 
+single spaces";
 
-    public static Either<TokenizeFail, TokenLine> Tokenize(TextLine txtLine)
+    public static Either<ParsingFail, TokenLine> Tokenize(TextLine txtLine)
     {
         var stringWithPtr = new StringWithPointer(txtLine.Text, 0);
         var tokenizeChain = 
@@ -56,10 +56,10 @@ public static class TokenizerFunctions
         return RecurseTokenizer(tokenizeChain, stringWithPtr).Match(
                    Some: seq => Right(
                        seq.TakeWhile(tok => tok.TokenType != TokenType.End).ToList()),
-                   None: Left<TokenizeFail, List<Token>>(
-                       new TokenizeFail(TokenizeFailMesg, stringWithPtr.Value, txtLine.LineNumber))
+                   None: Left<ParsingFail, List<Token>>(
+                       new ParsingFail(TokenizeFailMesg, "", new(), txtLine))
                ).Map(
-                   listToks => new TokenLine(txtLine.LineNumber, listToks)
+                   listToks => new TokenLine(listToks, txtLine)
                );
     }
 
@@ -86,7 +86,7 @@ public static class TokenizerFunctions
                     .IfMatchSuccessCreateTokenWithState(strP, TokenType.Word),
 
                 None: () => new WithStringPointerState<Token>(
-                    new Token("", TokenType.End), strP
+                    new Token("", TokenType.End, (strP.Pointer, strP.Pointer)), strP
                  )
             );
 
@@ -101,7 +101,7 @@ public static class TokenizerFunctions
                     .IfMatchSuccessCreateTokenWithState(strP, TokenType.Number),
 
                 None: new WithStringPointerState<Token>(
-                    new Token("", TokenType.End), strP
+                    new Token("", TokenType.End, (strP.Pointer, strP.Pointer)), strP
                  )
             );
 
@@ -115,7 +115,7 @@ public static class TokenizerFunctions
                     .IfMatchSuccessCreateTokenWithState(strP, TokenType.StandaloneLetter),
 
                 None: new WithStringPointerState<Token>(
-                    new Token("", TokenType.End), strP
+                    new Token("", TokenType.End, (strP.Pointer, strP.Pointer)), strP
                  )
             );
 
@@ -129,7 +129,7 @@ public static class TokenizerFunctions
                     .IfMatchSuccessCreateTokenWithState(strP, TokenType.NumberxNumber),
 
                 None: new WithStringPointerState<Token>(
-                    new Token("", TokenType.End), strP
+                    new Token("", TokenType.End, (strP.Pointer, strP.Pointer)), strP
                  )
             );
 
@@ -140,7 +140,7 @@ public static class TokenizerFunctions
                                                             TokenType tokenType) =>
         match.Success?
             Some(new WithStringPointerState<Token>(
-                    new Token(match.Value.Trim(), tokenType),
+                    new Token(match.Value.Trim(), tokenType, (strP.Pointer, strP.Pointer + match.Value.Trim().Length)),
                     strP.IncrementBy(match.Value.Length)
                 )
             ):

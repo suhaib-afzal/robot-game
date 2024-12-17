@@ -6,17 +6,13 @@ using System.Threading.Tasks;
 
 namespace RobotApp.App.Execution;
 
-public class ExecutionError
+public class ExecutionFail
 {
-    public ExecutionError(string message)
+    public ExecutionFail(string message)
     {
         Message = message;
     }
 
     public string Message { get; }
 
-    public override string ToString()
-    {
-        return Message;
-    }
 }

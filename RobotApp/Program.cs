@@ -3,56 +3,62 @@ using System.Collections.Generic;
 using System.Linq;
 using static RobotApp.App.DataTypes.GridConstraintsFunctions;
 using static RobotApp.App.DataTypes.RobotPositionFunctions;
+using static RobotApp.Parsing.Tokenization.TokenizerFunctions;
+using static RobotApp.Parsing.Analysis.SchematizerFunctions;
 using LanguageExt;
 using LanguageExt.Common;
 using RobotApp.App.Execution;
 using RobotApp.App.DataTypes;
+using System.IO;
+using System.Text;
+using RobotApp.Parsing.Tokenization;
+using RobotApp.App.Display;
 
 namespace RobotApp;
 
 
 class Program
 {
-  static void Main(string[] args)
-  {
-    var gridConstraints = new GridConstraints() 
-    { 
-      GridDimensions = (5, 5), 
-      ObstaclePositions = new List<(int, int)>() { (2,0) } 
-    };
-    var goalPos = new RobotPosition() { Coordinates = (4,4), FacingDirection = CompassDirection.North };
-    var startPos = new RobotPosition() { Coordinates = (0,0), FacingDirection = CompassDirection.South };
-    var instructions = new List<Instruction>() 
+    static void Main(string[] args)
     {
-      turnRobotLeft, 
-      moveRobotForward, 
-      turnRobotLeft, 
-      moveRobotForward, 
-      turnRobotLeft,
-      turnRobotLeft,
-      moveRobotForward
-    };
-    var gameSpec = new GameSpecification() 
-    { 
-        GridConstraints = gridConstraints, 
-        Journeys = new List<Journey> 
-        { 
-            new Journey() 
-            { 
-                GoalPosition = goalPos, 
-                Instructions = instructions, 
-                StartPosition = startPos 
-            } 
-        } 
-    };
+        string readContents;
+        using (var streamReader = new StreamReader("C:\\git\\suhaib-robot-dev-test\\RobotApp\\InputFiles\\EndToEnd5.txt", Encoding.UTF8))
+        {
+            readContents = streamReader.ReadToEnd().ReplaceLineEndings();
+        }
 
-    var result = Execute.runGame(gameSpec);
+        var result = (from tokenizedDoc in TokenizeDocument(readContents)
+                      from gameSpec in Schematizer(tokenizedDoc)
+                      select gameSpec)
+                     .Map(gameSpec => Execute.RunGame(gameSpec))
+                     .Display();
 
-    var resultString = result
-        .ConvertAll(
-            e => e.Right(x => x.ToString()).Left(y => y.ToString())
-        )
-        .Concat();
-    Console.WriteLine(resultString);
-  }
+        Console.ForegroundColor = result.Item2;    
+        Console.WriteLine(result.Item1);
+    }
 }
+
+
+/*
+        var gridConstraints = new GridConstraints((5, 5), new List<(int, int)>() { (2, 0) });
+        var goalPos = new RobotPosition((4, 4), CompassDirection.North);
+        var startPos = new RobotPosition((0, 0), CompassDirection.South);
+        var instructions = new List<Instruction>() 
+        {
+            turnRobotLeft, 
+            moveRobotForward, 
+            turnRobotLeft, 
+            moveRobotForward, 
+            turnRobotLeft,
+            turnRobotLeft,
+            moveRobotForward
+        };
+        var gameSpec = new GameSpecification
+        (
+            gridConstraints, 
+            new List<Journey> 
+            { 
+                new Journey(goalPos,startPos, instructions)
+            } 
+        );
+        */

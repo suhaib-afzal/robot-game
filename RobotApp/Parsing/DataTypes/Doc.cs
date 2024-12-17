@@ -21,13 +21,13 @@ public class Doc<T>
 
 public class Chunk<T>
 {
-    public Chunk(List<T> values)
+    public Chunk(List<T> lines)
     {
-        Values = values;
+        Lines = lines;
     }
 
 
-    public List<T> Values;
+    public List<T> Lines;
 }
 
 public static class DocAndChunkFunctions
@@ -44,7 +44,7 @@ public static class DocAndChunkFunctions
 
     public static Either<L, Chunk<B>> Sequence<L,A,B>(this Chunk<A> chunk, Func<A, Either<L, B>> func)
     {
-        return SequenceHelper(chunk.Values, new List<B>(), func).Map(list => new Chunk<B>(list));
+        return SequenceHelper(chunk.Lines, new List<B>(), func).Map(list => new Chunk<B>(list));
     }
 
     public static Either<L, List<B>> SequenceHelper<L, A, B>(List<A> list, List<B> acc, Func<A, Either<L, B>> func)
@@ -59,12 +59,10 @@ public static class DocAndChunkFunctions
                select rest;
     }
 
-    /*
-    public static Either<L, T> Expect<L, T>(this Doc<TokenLine> doc, int lineNum, Either<L,Chunk<TokenLine>> expectation)
+    public static List<TextLine> ToTextLines(this Chunk<TokenLine> chunk)
     {
-
+        return chunk.Lines.Map(l => l.TextLine).ToList();
     }
-    */
 
 
 }

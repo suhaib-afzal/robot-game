@@ -13,9 +13,5 @@ public class ExecutionResult
 
     public bool IsSuccess { get; set; }
 
-    public override string ToString()
-    {
-        var successStr = IsSuccess ? "SUCCESS" : "FAILURE";
-        return $"{successStr} {RobotPosition}";
-    }
+    
 }

@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using static RobotApp.Parsing.Tokenization.TokenizerFunctions;
 using RobotApp.Parsing.Tokenization;
 using LanguageExt.UnitTesting;
+using RobotApp.Parsing;
 
 namespace RobotAppTests.App.Parsing.Tokenization;
 
@@ -158,7 +159,7 @@ public class TokenizerFunctionsTest
         var eitherTokenLine = Tokenize(textLine);
 
         //Assert
-        var expected = new TokenizeFail(TokenizeFailMesg, lineText, lineNumber);
+        var expected = new ParsingFail(TokenizeFailMesg, lineText, lineNumber);
 
         eitherTokenLine.ShouldBeLeft(tokenLine =>
             tokenLine.Should().BeEquivalentTo(expected)
@@ -177,7 +178,7 @@ public class TokenizerFunctionsTest
         var eitherTokenLine = Tokenize(textLine);
 
         //Assert
-        var expected = new TokenizeFail(TokenizeFailMesg, lineText, lineNumber);
+        var expected = new ParsingFail(TokenizeFailMesg, lineText, lineNumber);
 
         eitherTokenLine.ShouldBeLeft(tokenLine =>
             tokenLine.Should().BeEquivalentTo(expected)
@@ -196,7 +197,7 @@ public class TokenizerFunctionsTest
         var eitherTokenLine = Tokenize(textLine);
 
         //Assert
-        var expected = new TokenizeFail(TokenizeFailMesg, lineText, lineNumber);
+        var expected = new ParsingFail(TokenizeFailMesg, lineText, lineNumber);
 
         eitherTokenLine.ShouldBeLeft(tokenLine =>
             tokenLine.Should().BeEquivalentTo(expected)
