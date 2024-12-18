@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using LanguageExt;
 using static LanguageExt.Prelude;
 
@@ -15,7 +13,7 @@ public class Doc<T>
         Chunks = chunks;
     }
 
-    public List<Chunk<T>> Chunks { get; set; }
+    public List<Chunk<T>> Chunks { get; }
 
 }
 

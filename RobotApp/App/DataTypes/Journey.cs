@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace RobotApp.App.DataTypes
 {
@@ -15,10 +11,10 @@ namespace RobotApp.App.DataTypes
             Instructions = instructions;
         }
 
-        public RobotPosition StartPosition { get; set; }
+        public RobotPosition StartPosition { get; }
 
-        public RobotPosition GoalPosition { get; set; }
+        public RobotPosition GoalPosition { get; }
 
-        public List<Instruction> Instructions { get; set; }
+        public List<Instruction> Instructions { get; }
     }
 }

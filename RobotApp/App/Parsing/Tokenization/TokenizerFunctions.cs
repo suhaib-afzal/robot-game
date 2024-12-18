@@ -4,15 +4,9 @@ using RobotApp.App.Parsing.DataTypes;
 using RobotApp.App.Parsing.Utility;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Text.RegularExpressions;
 using static RobotApp.App.Parsing.Tokenization.StringWithPointerFunctions;
-using LanguageExt.ClassInstances;
-using LanguageExt.TypeClasses;
-using System.Runtime.CompilerServices;
 using static RobotApp.App.Parsing.Utility.AltFunctions;
 using static RobotApp.App.Parsing.DataTypes.DocAndChunkFunctions;
 using RobotApp.App.Parsing.ParsingFailType;
@@ -40,7 +34,7 @@ public static class TokenizerFunctions
     }
 
 
-    public static string TokenizeFailMesg =>
+    internal static string TokenizeFailMesg =>
         @"Unable to do initial parsing of line. Please only use seqeunces of 1 or more 
 alphabetic characters or seqeunces of 1 or more numeric characters seperated by 
 single spaces";
@@ -79,7 +73,7 @@ single spaces";
     }
 
     //Match with strings starting with " kjkdokf", "jdciojcdij", " kcmcm "
-    public static Option<WithStringPointerState<Token>> TokenizeWord(StringWithPointer strP) =>
+    private static Option<WithStringPointerState<Token>> TokenizeWord(StringWithPointer strP) =>
         GetRestOfString(strP).Match(
 
                 Some: restStr => Regex.Match(restStr,
@@ -94,7 +88,7 @@ single spaces";
 
 
     //Match with strings starting with " 278468", "9900", " 14 "
-    public static Option<WithStringPointerState<Token>> TokenizeNumber(StringWithPointer strP) =>
+    private static Option<WithStringPointerState<Token>> TokenizeNumber(StringWithPointer strP) =>
         GetRestOfString(strP).Match(
 
                 Some: restStr => Regex.Match(restStr,
@@ -108,7 +102,7 @@ single spaces";
             );
 
     //Match with strings starting with " a", "K", " J "
-    public static Option<WithStringPointerState<Token>> TokenizeStandaloneLetter(StringWithPointer strP) =>
+    private static Option<WithStringPointerState<Token>> TokenizeStandaloneLetter(StringWithPointer strP) =>
         GetRestOfString(strP).Match(
 
                 Some: restStr => Regex.Match(restStr,
@@ -122,7 +116,7 @@ single spaces";
             );
 
     //Match with strings starting with " 89x990", "0x99", " 2x9847 "
-    public static Option<WithStringPointerState<Token>> TokenizeNumberxNumber(StringWithPointer strP) =>
+    private static Option<WithStringPointerState<Token>> TokenizeNumberxNumber(StringWithPointer strP) =>
         GetRestOfString(strP).Match(
 
                 Some: restStr => Regex.Match(restStr,

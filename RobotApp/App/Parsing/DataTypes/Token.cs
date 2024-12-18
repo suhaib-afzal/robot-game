@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace RobotApp.App.Parsing.DataTypes;
+﻿namespace RobotApp.App.Parsing.DataTypes;
 
 public class Token
 {
@@ -15,11 +9,11 @@ public class Token
         PositionRange = positionRange;
     }
 
-    public string Value;
+    public string Value { get; }
 
-    public TokenType TokenType;
+    public TokenType TokenType { get; }
 
-    public (int, int) PositionRange;
+    public (int, int) PositionRange { get; }
 }
 
 public enum TokenType

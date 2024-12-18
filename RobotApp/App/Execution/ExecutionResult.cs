@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using RobotApp.App.DataTypes;
+﻿using RobotApp.App.DataTypes;
 
 namespace RobotApp.App.Execution;
 
@@ -15,8 +10,8 @@ public class ExecutionResult
         IsSuccess = isSuccess;
     }
 
-    public RobotPosition RobotPosition { get; set; }
+    public RobotPosition RobotPosition { get; }
 
-    public bool IsSuccess { get; set; }
+    public bool IsSuccess { get; }
 
 }

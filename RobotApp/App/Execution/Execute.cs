@@ -1,10 +1,7 @@
 ﻿using LanguageExt;
 using RobotApp.App.DataTypes;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using static RobotApp.App.DataTypes.GridConstraintsFunctions;
 using static RobotApp.App.Execution.ExcutionFailFunctions;
 

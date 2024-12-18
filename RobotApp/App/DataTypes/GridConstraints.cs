@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace RobotApp.App.DataTypes;
 
@@ -18,9 +14,9 @@ public class GridConstraints
         ObstaclePositions = obstaclePositions;
     }
 
-    public (int, int) GridDimensions { get; set; }
+    public (int, int) GridDimensions { get; }
 
-    public List<(int, int)> ObstaclePositions { get; set; }
+    public List<(int, int)> ObstaclePositions { get; }
 }
 
 public static class GridConstraintsFunctions

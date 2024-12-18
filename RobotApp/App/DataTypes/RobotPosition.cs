@@ -1,9 +1,4 @@
 ﻿using RobotApp.App.Exceptions;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using static RobotApp.App.DataTypes.CompassDirectionFunctions;
 
 namespace RobotApp.App.DataTypes;
@@ -16,9 +11,9 @@ public class RobotPosition
         FacingDirection = facingDirection;
     }
 
-    public (int, int) Coordinates { get; set; }
+    public (int, int) Coordinates { get; }
 
-    public CompassDirection FacingDirection { get; set; }
+    public CompassDirection FacingDirection { get; }
 
     public override bool Equals(object obj)
     {

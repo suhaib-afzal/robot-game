@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace RobotApp.App.Parsing.DataTypes;
+﻿namespace RobotApp.App.Parsing.DataTypes;
 
 public class TextLine
 {
@@ -14,7 +8,7 @@ public class TextLine
         LineNumber = lineNumber;
     }
 
-    public string Text { get; set; }
+    public string Text { get; }
 
-    public int LineNumber { get; set; }
+    public int LineNumber { get; }
 }

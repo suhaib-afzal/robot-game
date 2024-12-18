@@ -1,18 +1,9 @@
 ﻿using FluentAssertions;
 using RobotApp.App.Parsing.DataTypes;
 using LanguageExt;
-using static LanguageExt.Prelude;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using static RobotApp.App.Parsing.Tokenization.TokenizerFunctions;
-using RobotApp.App.Parsing.Tokenization;
 using LanguageExt.UnitTesting;
-using RobotApp.App.Parsing;
 using RobotApp.App.Parsing.ParsingFailType;
-using LanguageExt.ClassInstances.Const;
 
 namespace RobotAppTests.App.Parsing.Tokenization;
 

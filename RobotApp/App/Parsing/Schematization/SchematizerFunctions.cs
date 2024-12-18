@@ -1,16 +1,11 @@
 ﻿using LanguageExt;
 using static LanguageExt.Prelude;
 using static RobotApp.App.DataTypes.RobotPositionFunctions;
-using static RobotApp.App.Parsing.Utility.AltFunctions;
 using RobotApp.App.DataTypes;
 using RobotApp.App.Parsing.DataTypes;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using LanguageExt.ClassInstances;
-using System.ComponentModel.Design;
 using RobotApp.App.Parsing.ParsingFailType;
 
 namespace RobotApp.App.Parsing.Schematization;
@@ -40,8 +35,8 @@ public static class SchematizerFunctions
 
         return djiod;
     }
-    //<Either<ParsingFail, Either<WithErrMsgCxt<L>, WithErrMsgCxt<R>>>>
-    public static Either<ParsingFail, WithErrMsgCxt<Either<L, R>>> Or<L,R>(
+
+    private static Either<ParsingFail, WithErrMsgCxt<Either<L, R>>> Or<L,R>(
         Func<Chunk<TokenLine>, ErrMsgContext, Either<ParsingFail, WithErrMsgCxt<R>>> tryFirst,
         Func<Chunk<TokenLine>, ErrMsgContext, Either<ParsingFail, WithErrMsgCxt<L>>> trySecond,
         Chunk<TokenLine> chunk,
@@ -60,7 +55,7 @@ public static class SchematizerFunctions
     }
 
 
-    public static Either<ParsingFail, WithErrMsgCxt<(int,int)>> GridSizeDefinition(Chunk<TokenLine> chunk,
+    private static Either<ParsingFail, WithErrMsgCxt<(int,int)>> GridSizeDefinition(Chunk<TokenLine> chunk,
                                                                                    ErrMsgContext context)
     {
         return from unit1     in chunk.Lines.ExpectLength(1, context.GridDef(chunk))
@@ -73,14 +68,14 @@ public static class SchematizerFunctions
                select tuple;
     }
 
-    public static Either<ParsingFail, WithErrMsgCxt<List<(int, int)>>> ObstaclesDefinition(
+    private static Either<ParsingFail, WithErrMsgCxt<List<(int, int)>>> ObstaclesDefinition(
                                                                             Chunk<TokenLine> chunk,
                                                                             ErrMsgContext context)
     {
         return InnerObstaclesDefinition(chunk.Lines, context.Obstacles(chunk));
     }
 
-    public static Either<ParsingFail, WithErrMsgCxt<List<(int, int)>>> InnerObstaclesDefinition(
+    private static Either<ParsingFail, WithErrMsgCxt<List<(int, int)>>> InnerObstaclesDefinition(
                                                                            List<TokenLine> tokenLines,
                                                                            ErrMsgContext context)
     {
@@ -99,7 +94,7 @@ public static class SchematizerFunctions
     }
 
 
-    public static Either<ParsingFail, WithErrMsgCxt<List<T>>> ManyChunks<T>(
+    private static Either<ParsingFail, WithErrMsgCxt<List<T>>> ManyChunks<T>(
         Func<Chunk<TokenLine>, ErrMsgContext,  Either<ParsingFail, WithErrMsgCxt<T>>> func,
         List<Chunk<TokenLine>> list,
         ErrMsgContext context)
@@ -111,7 +106,7 @@ public static class SchematizerFunctions
                    select t.Unwrap.Cons(rest.Unwrap).ToList().WithContext(rest.Context);
     }
 
-    public static Either<ParsingFail, WithErrMsgCxt<Journey>> JourneyDefinition(Chunk<TokenLine> chunk,
+    private static Either<ParsingFail, WithErrMsgCxt<Journey>> JourneyDefinition(Chunk<TokenLine> chunk,
                                                                                 ErrMsgContext context)
     {
         return from unit          in chunk.Lines.ExpectLength(3, context.Journey(chunk))
@@ -128,7 +123,7 @@ public static class SchematizerFunctions
     }
 
 
-    public static Either<ParsingFail, WithErrMsgCxt<RobotPosition>> RobotPositionDefinition(this TokenLine line,
+    private static Either<ParsingFail, WithErrMsgCxt<RobotPosition>> RobotPositionDefinition(this TokenLine line,
                                                                                             ErrMsgContext context)
     {
         return from posLine in line.ExpectLineTokenTypes(new() {
@@ -145,7 +140,7 @@ public static class SchematizerFunctions
     }
 
 
-    public static Either<ParsingFail, WithErrMsgCxt<Unit>> ExpectLength<T>(this List<T> list, 
+    private static Either<ParsingFail, WithErrMsgCxt<Unit>> ExpectLength<T>(this List<T> list, 
                                                                            int n,
                                                                            ErrMsgContext context)
     {
@@ -154,7 +149,7 @@ public static class SchematizerFunctions
             context.DidntFindExpectedLength();
     }
 
-    public static Either<ParsingFail, WithErrMsgCxt<TokenLine>> ExpectLineTokenTypes(
+    private static Either<ParsingFail, WithErrMsgCxt<TokenLine>> ExpectLineTokenTypes(
         this TokenLine tokenLine,
         List<TokenType> types,
         ErrMsgContext context)
@@ -165,7 +160,7 @@ public static class SchematizerFunctions
             newContext.DidntFindExpectedTokenTypes();
     }
 
-    public static Either<ParsingFail, WithErrMsgCxt<Unit>> ParseWordAsKeyword(
+    private static Either<ParsingFail, WithErrMsgCxt<Unit>> ParseWordAsKeyword(
         this TokenLine tokenLine,
         int index,
         string word,
@@ -180,7 +175,7 @@ public static class SchematizerFunctions
     //CS CS1501	No overload for method 'Sequence' takes 1 arguments
     // LanguageExt.Eff<RT, IEnumerable<B>> IEnumerable<char>.Sequence<RT,char,B>(Func<char, Eff<RT,B>> f)
     // where RT: struct
-    public static Either<ParsingFail, WithErrMsgCxt<List<Instruction>>> ParseWordAsLetterSequence(
+    private static Either<ParsingFail, WithErrMsgCxt<List<Instruction>>> ParseWordAsLetterSequence(
         this TokenLine tokenLine,
         int index,
         ErrMsgContext context)
@@ -194,21 +189,21 @@ public static class SchematizerFunctions
         }).Map(instruct => instruct.WithContext(context));
     }
 
-    
-    public static Either<L, List<R>>  Sequence<T,L,R>(
+
+    private static Either<L, List<R>>  Sequence<T,L,R>(
        this List<T> list,
        Func<T, Either<L,R>> func)
     {
         return list.Count == 0 ?
             new List<R>() :
-            from kmd   in func(list.Head())
-            from ejije in list.Tail().Sequence(func)
-            select ejije.Prepend(kmd).ToList();
+            from head   in func(list.Head())
+            from rest in list.Tail().Sequence(func)
+            select rest.Prepend(head).ToList();
     }
-    
-    
 
-    public static Either<ParsingFail, WithErrMsgCxt<CompassDirection>> ParseStandaloneLetter(
+
+
+    private static Either<ParsingFail, WithErrMsgCxt<CompassDirection>> ParseStandaloneLetter(
         this TokenLine tokenLine,
         int index,
         ErrMsgContext context)
@@ -223,7 +218,7 @@ public static class SchematizerFunctions
         };
     }
 
-    public static Either<ParsingFail, WithErrMsgCxt<(int,int)>> ParseNumberXNumber(
+    private static Either<ParsingFail, WithErrMsgCxt<(int,int)>> ParseNumberXNumber(
         this TokenLine tokenLine,
         int index,
         ErrMsgContext context)
@@ -237,7 +232,7 @@ public static class SchematizerFunctions
             context.CouldntParseNumberXNumber(index);
     }
 
-    public static Either<ParsingFail, WithErrMsgCxt<int>> ParseNumber(
+    private static Either<ParsingFail, WithErrMsgCxt<int>> ParseNumber(
         this TokenLine tokenLine,
         int index,
         ErrMsgContext context)

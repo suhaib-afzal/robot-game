@@ -1,13 +1,10 @@
 ﻿using LanguageExt;
-using RobotApp.App.DataTypes;
 using RobotApp.App.Execution;
 using RobotApp.App.Parsing.DataTypes;
 using RobotApp.App.Parsing.ParsingFailType;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using static RobotApp.App.DataTypes.CompassDirectionFunctions;
 
 namespace RobotApp.App.Display;
@@ -43,11 +40,10 @@ public static class DisplayFunctions
 
     public static string DisplayList<T>(List<T> list, Func<T, string> displayT, bool useEmptyLine)
     {
-        var fdkv = list.Map(item => string.Concat(displayT(item).Append(Environment.NewLine)))
+        return list.Map(item => string.Concat(displayT(item).Append(Environment.NewLine)))
             .Intersperse(useEmptyLine? Environment.NewLine : "")
             .ToList()
-            .Concat();
-            return fdkv;
+            .Concat();   
     }
 
     public static string Display(this ContextualInfo contextualInfo)

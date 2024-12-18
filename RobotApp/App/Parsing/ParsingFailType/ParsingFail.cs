@@ -1,10 +1,6 @@
 ﻿using LanguageExt;
 using RobotApp.App.Parsing.DataTypes;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace RobotApp.App.Parsing.ParsingFailType;
 
@@ -13,19 +9,19 @@ namespace RobotApp.App.Parsing.ParsingFailType;
 public class ParsingFail
 {
     //Both Levels
-    public string MessageHeader { get; set; }
+    public string MessageHeader { get; }
 
-    public List<ContextualInfo> ContextualInfoList { get; set; }
+    public List<ContextualInfo> ContextualInfoList { get; }
 
-    public bool isChunkLevel { get; set; }
+    public bool isChunkLevel { get; }
 
     //Chunk Level Error
-    public List<TextLine> ProblemLines { get; set; }
+    public List<TextLine> ProblemLines { get; }
 
     //Line level Error
-    public TextLine ProblemLine { get; set; }
+    public TextLine ProblemLine { get; }
 
-    public Option<(int, int)> ProblemSpan { get; set; }
+    public Option<(int, int)> ProblemSpan { get; }
 
 
     //Line level constructor

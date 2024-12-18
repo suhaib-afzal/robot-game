@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace RobotApp.App.Parsing.ParsingFailType;
 
@@ -14,7 +10,7 @@ public class ContextualInfo
         Examples = examples;
     }
 
-    public string Info { get; set; }
+    public string Info { get; }
 
-    public List<string> Examples { get; set; }
+    public List<string> Examples { get; }
 }

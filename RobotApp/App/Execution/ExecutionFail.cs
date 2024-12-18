@@ -1,11 +1,4 @@
-﻿using LanguageExt;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace RobotApp.App.Execution;
+﻿namespace RobotApp.App.Execution;
 
 //TODO: Dont like risking Coords to be accessed from OutOfBounds
 //      instance, dont want additonal red tape of wrapping in an Option

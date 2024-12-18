@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace RobotApp.App.DataTypes
 {
@@ -14,8 +10,8 @@ namespace RobotApp.App.DataTypes
             Journeys = journeys;
         }
 
-        public GridConstraints GridConstraints { get; set; }
+        public GridConstraints GridConstraints { get; }
 
-        public List<Journey> Journeys { get; set; }
+        public List<Journey> Journeys { get; }
     }
 }

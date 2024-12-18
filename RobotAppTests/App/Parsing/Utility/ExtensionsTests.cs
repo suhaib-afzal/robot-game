@@ -1,10 +1,5 @@
 ﻿using FluentAssertions;
 using RobotApp.App.Parsing.Utility;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace RobotAppTests.App.Parsing.Utility;
 

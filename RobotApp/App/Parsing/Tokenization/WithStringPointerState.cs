@@ -1,13 +1,6 @@
-﻿using RobotApp.App.Parsing.DataTypes;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace RobotApp.App.Parsing.Tokenization
+﻿namespace RobotApp.App.Parsing.Tokenization
 {
-    public class WithStringPointerState<T>
+    internal class WithStringPointerState<T>
     {
         public WithStringPointerState(T value, StringWithPointer stringWithPointer)
         {
@@ -15,8 +8,8 @@ namespace RobotApp.App.Parsing.Tokenization
             StringWithPointer = stringWithPointer;
         }
 
-        public T Value { get; set; }
+        public T Value { get; }
 
-        public StringWithPointer StringWithPointer { get; set; }
+        public StringWithPointer StringWithPointer { get; }
     }
 }

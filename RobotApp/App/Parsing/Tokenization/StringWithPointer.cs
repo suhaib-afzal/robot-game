@@ -1,14 +1,8 @@
 ﻿using LanguageExt;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace RobotApp.App.Parsing.Tokenization;
 
-public class StringWithPointer
+internal class StringWithPointer
 {
     public StringWithPointer(string value, int pointer)
     {
@@ -16,12 +10,12 @@ public class StringWithPointer
         Pointer = pointer;
     }
 
-    public string Value { get; set; }
+    public string Value { get; }
 
-    public int Pointer { get; set; }
+    public int Pointer { get; }
 }
 
-public static class StringWithPointerFunctions
+internal static class StringWithPointerFunctions
 {
     public static StringWithPointer IncrementBy(this StringWithPointer strP, int n)
     {

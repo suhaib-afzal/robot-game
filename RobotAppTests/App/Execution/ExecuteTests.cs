@@ -2,11 +2,6 @@
 using static RobotApp.App.DataTypes.RobotPositionFunctions;
 using static RobotApp.App.Execution.ExcutionFailFunctions;
 using static RobotApp.App.Display.DisplayFunctions;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using RobotApp.App.Execution;
 using LanguageExt;
 using FluentAssertions;
