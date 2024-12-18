@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using static RobotApp.App.DataTypes.GridConstraintsFunctions;
+using static RobotApp.App.Execution.ExcutionFailFunctions;
 
 namespace RobotApp.App.Execution;
 
@@ -31,10 +32,10 @@ public static class Execute
         {
             if (goalPosition.Equals(position))
             {
-                return new ExecutionResult() { IsSuccess = true, RobotPosition = position };
+                return new ExecutionResult(position, true);
             }
 
-            return new ExecutionResult() { IsSuccess = false, RobotPosition = position };
+            return new ExecutionResult(position, false);
         }
 
         var instruction = instructions.First();
@@ -42,15 +43,14 @@ public static class Execute
 
         var nextPosition = instruction.Invoke(position);
 
-        if (!withinBounds(gridConstraints, nextPosition))
+        if (!WithinBounds(gridConstraints, nextPosition))
         {
-            return new ExecutionFail("OUT OF BOUNDS");
+            return OutOfBounds();
         }
 
-        if (hasCrashedIntoObstacle(gridConstraints, nextPosition))
+        if (HasCrashedIntoObstacle(gridConstraints, nextPosition))
         {
-            return new
-              ExecutionFail($"CRASHED {nextPosition.Coordinates.Item1} {nextPosition.Coordinates.Item2}");
+            return Crashed(nextPosition.Coordinates);
         }
 
         return RunInstructions(gridConstraints, goalPosition, nextPosition, restInstructions);

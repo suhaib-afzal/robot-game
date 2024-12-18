@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RobotApp.Parsing.DataTypes;
+namespace RobotApp.App.Parsing.DataTypes;
 
 public class TextLine
 {

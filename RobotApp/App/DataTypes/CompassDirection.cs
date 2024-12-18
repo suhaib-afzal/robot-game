@@ -18,7 +18,7 @@ public enum CompassDirection
 public static class CompassDirectionFunctions
 {
 
-    public static CompassDirection turnLeft(CompassDirection direction)
+    public static CompassDirection TurnLeft(CompassDirection direction)
     {
         return direction switch
         {
@@ -30,7 +30,7 @@ public static class CompassDirectionFunctions
         };
     }
 
-    public static CompassDirection turnRight(CompassDirection direction)
+    public static CompassDirection TurnRight(CompassDirection direction)
     {
         return direction switch
         {
@@ -42,7 +42,7 @@ public static class CompassDirectionFunctions
         };
     }
 
-    public static char toChar(CompassDirection direction)
+    public static char ToChar(CompassDirection direction)
     {
         return direction switch
         {

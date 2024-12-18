@@ -19,11 +19,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="App\DataTypes\" />
-    <Folder Include="App\Execution\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\RobotApp\RobotApp.csproj" />
   </ItemGroup>
 

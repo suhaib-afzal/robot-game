@@ -3,15 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using static RobotApp.App.DataTypes.GridConstraintsFunctions;
 using static RobotApp.App.DataTypes.RobotPositionFunctions;
-using static RobotApp.Parsing.Tokenization.TokenizerFunctions;
-using static RobotApp.Parsing.Analysis.SchematizerFunctions;
+using static RobotApp.App.Parsing.Tokenization.TokenizerFunctions;
+using static RobotApp.App.Parsing.Schematization.SchematizerFunctions;
 using LanguageExt;
 using LanguageExt.Common;
 using RobotApp.App.Execution;
 using RobotApp.App.DataTypes;
 using System.IO;
 using System.Text;
-using RobotApp.Parsing.Tokenization;
+using RobotApp.App.Parsing.Tokenization;
 using RobotApp.App.Display;
 
 namespace RobotApp;
@@ -21,8 +21,12 @@ class Program
 {
     static void Main(string[] args)
     {
+        var filePath = args.Length == 0 ?
+            $"{Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.FullName}\\InputFiles\\EndToEndTests\\EndToEnd8.txt" :
+            args[0];
+
         string readContents;
-        using (var streamReader = new StreamReader("C:\\git\\suhaib-robot-dev-test\\RobotApp\\InputFiles\\EndToEnd5.txt", Encoding.UTF8))
+        using (var streamReader = new StreamReader(filePath, Encoding.UTF8))
         {
             readContents = streamReader.ReadToEnd().ReplaceLineEndings();
         }
@@ -37,28 +41,3 @@ class Program
         Console.WriteLine(result.Item1);
     }
 }
-
-
-/*
-        var gridConstraints = new GridConstraints((5, 5), new List<(int, int)>() { (2, 0) });
-        var goalPos = new RobotPosition((4, 4), CompassDirection.North);
-        var startPos = new RobotPosition((0, 0), CompassDirection.South);
-        var instructions = new List<Instruction>() 
-        {
-            turnRobotLeft, 
-            moveRobotForward, 
-            turnRobotLeft, 
-            moveRobotForward, 
-            turnRobotLeft,
-            turnRobotLeft,
-            moveRobotForward
-        };
-        var gameSpec = new GameSpecification
-        (
-            gridConstraints, 
-            new List<Journey> 
-            { 
-                new Journey(goalPos,startPos, instructions)
-            } 
-        );
-        */

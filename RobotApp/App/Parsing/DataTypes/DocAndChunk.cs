@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using LanguageExt;
 using static LanguageExt.Prelude;
 
-namespace RobotApp.Parsing.DataTypes;
+namespace RobotApp.App.Parsing.DataTypes;
 
 public class Doc<T>
 {
@@ -30,6 +30,7 @@ public class Chunk<T>
     public List<T> Lines;
 }
 
+
 public static class DocAndChunkFunctions
 {
 
@@ -42,12 +43,12 @@ public static class DocAndChunkFunctions
                   .Map(chunks => new Doc<B>(chunks.ToList()));
     }
 
-    public static Either<L, Chunk<B>> Sequence<L,A,B>(this Chunk<A> chunk, Func<A, Either<L, B>> func)
+    private static Either<L, Chunk<B>> Sequence<L,A,B>(this Chunk<A> chunk, Func<A, Either<L, B>> func)
     {
         return SequenceHelper(chunk.Lines, new List<B>(), func).Map(list => new Chunk<B>(list));
     }
 
-    public static Either<L, List<B>> SequenceHelper<L, A, B>(List<A> list, List<B> acc, Func<A, Either<L, B>> func)
+    private static Either<L, List<B>> SequenceHelper<L, A, B>(List<A> list, List<B> acc, Func<A, Either<L, B>> func)
     {
         if (list.Count == 0)
         {
@@ -63,6 +64,5 @@ public static class DocAndChunkFunctions
     {
         return chunk.Lines.Map(l => l.TextLine).ToList();
     }
-
 
 }

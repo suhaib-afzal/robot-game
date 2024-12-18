@@ -1,7 +1,7 @@
 ﻿using LanguageExt;
 using static LanguageExt.Prelude;
-using RobotApp.Parsing.DataTypes;
-using RobotApp.Parsing.Utility;
+using RobotApp.App.Parsing.DataTypes;
+using RobotApp.App.Parsing.Utility;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -9,14 +9,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Text.RegularExpressions;
-using static RobotApp.Parsing.Tokenization.StringWithPointerFunctions;
+using static RobotApp.App.Parsing.Tokenization.StringWithPointerFunctions;
 using LanguageExt.ClassInstances;
 using LanguageExt.TypeClasses;
 using System.Runtime.CompilerServices;
-using static RobotApp.Parsing.Utility.AltFunctions;
-using static RobotApp.Parsing.DataTypes.DocAndChunkFunctions;
+using static RobotApp.App.Parsing.Utility.AltFunctions;
+using static RobotApp.App.Parsing.DataTypes.DocAndChunkFunctions;
+using RobotApp.App.Parsing.ParsingFailType;
 
-namespace RobotApp.Parsing.Tokenization;
+namespace RobotApp.App.Parsing.Tokenization;
 
 public static class TokenizerFunctions
 {
@@ -25,7 +26,7 @@ public static class TokenizerFunctions
         return Chunker(rawDoc).Sequence(textline => Tokenize(textline));
     }
 
-    public static Doc<TextLine> Chunker(string rawDoc)
+    private static Doc<TextLine> Chunker(string rawDoc)
     {
         var chunks = rawDoc.Split(Environment.NewLine)
             .Map((i, c) => new TextLine(text: c, lineNumber: i + 1))
@@ -37,6 +38,7 @@ public static class TokenizerFunctions
         var textDoc = new Doc<TextLine>(chunks);
         return textDoc;
     }
+
 
     public static string TokenizeFailMesg =>
         @"Unable to do initial parsing of line. Please only use seqeunces of 1 or more 
@@ -57,7 +59,7 @@ single spaces";
                    Some: seq => Right(
                        seq.TakeWhile(tok => tok.TokenType != TokenType.End).ToList()),
                    None: Left<ParsingFail, List<Token>>(
-                       new ParsingFail(TokenizeFailMesg, "", new(), txtLine))
+                       new ParsingFail(TokenizeFailMesg, new(), txtLine, Option<(int,int)>.None))
                ).Map(
                    listToks => new TokenLine(listToks, txtLine)
                );
@@ -137,12 +139,22 @@ single spaces";
     private static Option<WithStringPointerState<Token>> IfMatchSuccessCreateTokenWithState(
                                                             this Match match,
                                                             StringWithPointer strP,
-                                                            TokenType tokenType) =>
-        match.Success?
+                                                            TokenType tokenType)
+    {
+        var startRange = CountLeadingSpaces(match.Value) + strP.Pointer;
+        return match.Success ?
             Some(new WithStringPointerState<Token>(
-                    new Token(match.Value.Trim(), tokenType, (strP.Pointer, strP.Pointer + match.Value.Trim().Length)),
+                    new Token(match.Value.Trim(), tokenType,
+                        (startRange, startRange + match.Value.Trim().Length)),
                     strP.IncrementBy(match.Value.Length)
                 )
-            ):
+            ) :
             None;
+    }
+        
+
+    private static int CountLeadingSpaces(string str)
+    {
+        return str.TakeWhile(c => c == ' ').Count();
+    }
 }

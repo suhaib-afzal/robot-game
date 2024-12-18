@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RobotApp.Parsing.Analysis;
+namespace RobotApp.App.Parsing.Schematization;
 
 public class WithErrMsgCxt<T>
 {

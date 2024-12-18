@@ -1,5 +1,6 @@
 ﻿using LanguageExt;
-using RobotApp.Parsing.DataTypes;
+using RobotApp.App.Parsing.DataTypes;
+using RobotApp.App.Parsing.ParsingFailType;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -10,7 +11,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RobotApp.Parsing.Analysis;
+namespace RobotApp.App.Parsing.Schematization;
 
 public class ErrMsgContext
 {
@@ -114,8 +115,8 @@ public static class ErrMsgContextFunctions
             {
                 ExpectationType.RobotPosition => new ParsingFail(
                     "Could not parse as a number, expecting number in this position in an Robot Position defintion",
-                    RobotPositionDefinitionShouldBe,
-                    RobotPositionDefinitionExamples,
+                    new() { new ContextualInfo(RobotPositionDefinitionShouldBe,
+                                               RobotPositionDefinitionExamples) },
                     context.TokenLine.TextLine,
                     context.TokenLine.Tokens[tokenIndex].PositionRange),
                 _ => throw new UnexpectedContextException()
@@ -132,8 +133,8 @@ public static class ErrMsgContextFunctions
             {
                 ExpectationType.GridDefinition => new ParsingFail(
                     "Could not parse as a Number-by-Number pair, which is expected in this position in an Grid Defintion",
-                    GridDefinitionShouldBe,
-                    GridDefinitionExamples,
+                    new() { new ContextualInfo(GridDefinitionShouldBe,
+                                               GridDefinitionExamples) },
                     context.TokenLine.TextLine,
                     context.TokenLine.Tokens[tokenIndex].PositionRange),
                 _ => throw new UnexpectedContextException()
@@ -150,8 +151,8 @@ public static class ErrMsgContextFunctions
             {
                 ExpectationType.RobotPosition => new ParsingFail(
                     "Could not parse as a Standalone Letter, which is expected in this position in a Robot Position Defintion",
-                    RobotPositionDefinitionShouldBe,
-                    RobotPositionDefinitionExamples,
+                    new() { new ContextualInfo(RobotPositionDefinitionShouldBe,
+                                               RobotPositionDefinitionExamples) },
                     context.TokenLine.TextLine,
                     context.TokenLine.Tokens[tokenIndex].PositionRange),
                 _ => throw new UnexpectedContextException()
@@ -168,9 +169,10 @@ public static class ErrMsgContextFunctions
             {
                 ExpectationType.Instructions => new ParsingFail(
                     "Could not parse as a Instructions letter sequence",
-                    InstructionDefinitionShouldBe,
-                    InstructionDefinitionExamples,
-                    context.TokenLine.TextLine),
+                    new() { new ContextualInfo(InstructionDefinitionShouldBe,
+                                               InstructionDefinitionExamples) },
+                    context.TokenLine.TextLine,
+                    Option<(int,int)>.None),
                 _ => throw new UnexpectedContextException()
             },
             _ => throw new UnexpectedContextException()
@@ -186,14 +188,16 @@ public static class ErrMsgContextFunctions
             {
                 ExpectationType.GridDefinition => new ParsingFail(
                     "Could not parse word as GRID keyword, expecting Grid Defintion at this point in the document",
-                    GridDefinitionShouldBe,
-                    GridDefinitionExamples,
+                    new() { new ContextualInfo(GridDefinitionShouldBe,
+                                               GridDefinitionExamples) },
                     context.TokenLine.TextLine,
                     context.TokenLine.Tokens[tokenIndex].PositionRange),
                 ExpectationType.Obstacles => new ParsingFail(
-                    "Could not parse word as OBSTACLE keyword, expecting Obstacle Defintion as failed to parse this section as Journey defintion",
-                    ObstaclesDefinitionShouldBe,
-                    ObstaclesDefinitionExamples,
+                    "Could not parse word as OBSTACLE keyword, currently expecting Obstacle Defintion because this section has already failed to be parsed as a Journey Defintion",
+                    new()
+                    { new ContextualInfo(ObstaclesDefinitionShouldBe, ObstaclesDefinitionExamples),
+                      new ContextualInfo(JourneyDefinitionShouldBe, JourneyDefinitionExamples),
+                    },
                     context.TokenLine.TextLine,
                     context.TokenLine.Tokens[tokenIndex].PositionRange),
                 _ => throw new UnexpectedContextException()
@@ -210,16 +214,26 @@ public static class ErrMsgContextFunctions
             {
                 ExpectationType.GridDefinition => new ParsingFail(
                     "Failed to find the expected line structure, expecting Grid Defintion",
-                    GridDefinitionShouldBe, GridDefinitionExamples, context.TokenLine.TextLine),
+                    new() { new ContextualInfo(GridDefinitionShouldBe, GridDefinitionExamples) },
+                    context.TokenLine.TextLine, Option<(int, int)>.None),
+
                 ExpectationType.Obstacles => new ParsingFail(
-                    "Failed to find the expected line structure, expecting Obstacle Defintion, as this section has already failed to be parsed as Journey Defintion",
-                    ObstaclesDefinitionShouldBe, ObstaclesDefinitionExamples, context.TokenLine.TextLine),
+                    "Failed to find the expected line structure, currently expecting Obstacle Defintion because this section has already failed to be parsed as a Journey Defintion",
+                    new() 
+                    { new ContextualInfo(JourneyDefinitionShouldBe, JourneyDefinitionExamples),
+                      new ContextualInfo(ObstaclesDefinitionShouldBe, ObstaclesDefinitionExamples), 
+                    },
+                    context.TokenLine.TextLine, Option<(int, int)>.None),
+
                 ExpectationType.RobotPosition => new ParsingFail(
                     "Failed to find the expected line structure, expecting Robot Position",
-                    RobotPositionDefinitionShouldBe, RobotPositionDefinitionExamples, context.TokenLine.TextLine),
+                    new() { new ContextualInfo(RobotPositionDefinitionShouldBe, RobotPositionDefinitionExamples) },
+                    context.TokenLine.TextLine, Option<(int, int)>.None),
+
                 ExpectationType.Instructions => new ParsingFail(
                     "Failed to find the expected line structure, expecting Instructions",
-                    InstructionDefinitionShouldBe, InstructionDefinitionExamples, context.TokenLine.TextLine),
+                    new() { new ContextualInfo(InstructionDefinitionShouldBe, InstructionDefinitionExamples) }, 
+                    context.TokenLine.TextLine, Option<(int, int)>.None),
                 _ => throw new UnexpectedContextException()
             },
             _ => throw new UnexpectedContextException()
@@ -232,13 +246,13 @@ public static class ErrMsgContextFunctions
         {
             (ExpectationType.GridDefinition, 1) => new ParsingFail(
                 "The first section is expected to be a Grid Defintion",
-                GridDefinitionShouldBe,
-                GridDefinitionExamples,
+                new() { new ContextualInfo(GridDefinitionShouldBe,
+                                           GridDefinitionExamples) },
                 context.Chunk.ToTextLines()),
             (ExpectationType.Journey, int i) when i > 1 => new ParsingFail(
                 "This section has an unexpected length, expected Journey Defintion",
-                JourneyDefinitionShouldBe,
-                JourneyDefinitionExamples,
+                new() { new ContextualInfo(JourneyDefinitionShouldBe,
+                                           JourneyDefinitionExamples) },
                 context.Chunk.ToTextLines()),
             _ => throw new UnexpectedContextException()
         };
@@ -296,15 +310,15 @@ public static class ErrMsgContextFunctions
     public static List<string> ObstaclesDefinitionExamples = new List<string>()
     {
         @"OBSTACLE 1 100
-          OBSTACLE 7 99
-          OBSTACLE 8 88",
+OBSTACLE 7 99
+OBSTACLE 8 88",
 
         @"OBSTACLE 6 7",
 
         @"OBSTACLE 9 0
-          OBSTACLE 0 2
-          OBSTACLE 1000 10000
-          OBSTACLE 880 73",
+OBSTACLE 0 2
+OBSTACLE 1000 10000
+OBSTACLE 880 73",
     };
 
     public static string RobotPositionDefinitionShouldBe = @"Robot Position should be defined as 1 line with Num Num then a Compass Direction as a single letter";
@@ -326,7 +340,7 @@ public static class ErrMsgContextFunctions
     };
 
     public static string JourneyDefinitionShouldBe
-        = @$"The journey defintion should be 3 lines, with the start robot position, then the instructions, then the goal robot position, the section should end with an empty line
+        = @$"Journey Defintion should be 3 lines, with the start robot position, then the instructions, then the goal robot position, the section should end with an empty line
 {RobotPositionDefinitionShouldBe}
 {InstructionDefinitionShouldBe}";
 

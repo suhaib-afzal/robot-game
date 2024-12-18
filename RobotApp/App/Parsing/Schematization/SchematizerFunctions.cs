@@ -1,9 +1,9 @@
 ﻿using LanguageExt;
 using static LanguageExt.Prelude;
 using static RobotApp.App.DataTypes.RobotPositionFunctions;
-using static RobotApp.Parsing.Utility.AltFunctions;
+using static RobotApp.App.Parsing.Utility.AltFunctions;
 using RobotApp.App.DataTypes;
-using RobotApp.Parsing.DataTypes;
+using RobotApp.App.Parsing.DataTypes;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,8 +11,9 @@ using System.Text;
 using System.Threading.Tasks;
 using LanguageExt.ClassInstances;
 using System.ComponentModel.Design;
+using RobotApp.App.Parsing.ParsingFailType;
 
-namespace RobotApp.Parsing.Analysis;
+namespace RobotApp.App.Parsing.Schematization;
 
 public static class SchematizerFunctions
 {   
@@ -186,9 +187,9 @@ public static class SchematizerFunctions
     {
         return tokenLine.Tokens[index].Value.ToList().Sequence<char, ParsingFail, Instruction>(c => c switch
         {
-            'F' => (Instruction)moveRobotForward,
-            'L' => (Instruction)turnRobotLeft,
-            'R' => (Instruction)turnRobotRight,
+            'F' => (Instruction)MoveRobotForward,
+            'L' => (Instruction)TurnRobotLeft,
+            'R' => (Instruction)TurnRobotRight,
             _ => context.CouldntParseWordAsLetterSequence(index)
         }).Map(instruct => instruct.WithContext(context));
     }

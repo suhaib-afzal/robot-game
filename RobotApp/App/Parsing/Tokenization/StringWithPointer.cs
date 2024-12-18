@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RobotApp.Parsing.Tokenization;
+namespace RobotApp.App.Parsing.Tokenization;
 
 public class StringWithPointer
 {

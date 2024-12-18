@@ -6,6 +6,10 @@ using System.Threading.Tasks;
 
 namespace RobotApp.App.DataTypes;
 
+//TODO:
+//Add Mechanism to validate GridConstraints (not in this file necessarily)
+//Validate that Obstacles are located inside Grid
+//Ensure Grid dimensions are >= 1
 public class GridConstraints
 {
     public GridConstraints((int, int) gridDimensions, List<(int, int)> obstaclePositions)
@@ -21,7 +25,7 @@ public class GridConstraints
 
 public static class GridConstraintsFunctions
 {
-    public static bool withinBounds(GridConstraints gridConstraints, RobotPosition robotPosition)
+    public static bool WithinBounds(GridConstraints gridConstraints, RobotPosition robotPosition)
     {
         if (robotPosition.Coordinates.Item1 < 0 || robotPosition.Coordinates.Item2 < 0)
         {
@@ -41,7 +45,7 @@ public static class GridConstraintsFunctions
         return true;
     }
 
-    public static bool hasCrashedIntoObstacle(GridConstraints gridConstraints, RobotPosition robotPosition)
+    public static bool HasCrashedIntoObstacle(GridConstraints gridConstraints, RobotPosition robotPosition)
     {
         return gridConstraints.ObstaclePositions.Contains(robotPosition.Coordinates);
     }

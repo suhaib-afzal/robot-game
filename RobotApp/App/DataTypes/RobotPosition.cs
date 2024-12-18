@@ -20,11 +20,6 @@ public class RobotPosition
 
     public CompassDirection FacingDirection { get; set; }
 
-    public override string ToString()
-    {
-        return $"{Coordinates.Item1} {Coordinates.Item2} {toChar(FacingDirection)}";
-    }
-
     public override bool Equals(object obj)
     {
         return obj is RobotPosition && Equals(obj as RobotPosition);
@@ -39,19 +34,19 @@ public class RobotPosition
 
 public static class RobotPositionFunctions
 {
-    public static RobotPosition turnRobotLeft(RobotPosition robotPosition)
+    public static RobotPosition TurnRobotLeft(RobotPosition robotPosition)
     {
-        var newFacingDirection = turnLeft(robotPosition.FacingDirection);
+        var newFacingDirection = TurnLeft(robotPosition.FacingDirection);
         return new RobotPosition(robotPosition.Coordinates, newFacingDirection);
     }
 
-    public static RobotPosition turnRobotRight(RobotPosition robotPosition)
+    public static RobotPosition TurnRobotRight(RobotPosition robotPosition)
     {
-        var newFacingDirection = turnRight(robotPosition.FacingDirection);
+        var newFacingDirection = TurnRight(robotPosition.FacingDirection);
         return new RobotPosition(robotPosition.Coordinates, newFacingDirection);
     }
 
-    public static RobotPosition moveRobotForward(RobotPosition robotPosition)
+    public static RobotPosition MoveRobotForward(RobotPosition robotPosition)
     {
         var coordIncrement = robotPosition.FacingDirection switch
         {
